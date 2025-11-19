@@ -11,7 +11,7 @@ except importlib.metadata.PackageNotFoundError:
 
 
 class Widget(anywidget.AnyWidget):
-    dataFile = traitlets.Unicode("../test_data/karate_dataset.json").tag(sync=True)
+    dataFile = traitlets.Unicode("/files/test_data/karate_dataset.json").tag(sync=True)
 
     _esm = pathlib.Path(__file__).parent / "static" / "widget.js"
     _css = pathlib.Path(__file__).parent / "static" / "widget.css"
