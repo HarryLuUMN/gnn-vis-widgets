@@ -10,7 +10,7 @@ except importlib.metadata.PackageNotFoundError:
     __version__ = "unknown"
 
 
-class Widget(anywidget.AnyWidget):
+class GraphVisualizer(anywidget.AnyWidget):
     dataFile = traitlets.Unicode("/files/test_data/karate_dataset.json").tag(sync=True)
 
     _esm = pathlib.Path(__file__).parent / "static" / "widget.js"

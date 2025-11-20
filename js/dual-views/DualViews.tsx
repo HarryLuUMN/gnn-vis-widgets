@@ -130,22 +130,12 @@ const DualViews: React.FC<Props> = ({
   return (
     <>
       <style>{styles}</style>
-      <div className="info-container-wrapper">
-        <div className="info-container" style={{ color: "gray" }}>
-          <div className="info-title" style={{ color: "gray" }}>
-            Understanding Graphs and Adjacency Matrices
-          </div>
-          <div className="info-box" style={{ color: "gray" }}>
-            <p>
-              A graph can be visualized as either a node-link diagram or an adjacency matrix. Hover over the nodes, edges, matrix cells, or matrix labels to highlight their connections.
-            </p>
-          </div>
-        </div>
-      </div>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-        <div id="chart1" className="view">
-          {sandboxMode ? 
-          <></> : 
+      <div style={{ display: "grid", gridTemplateColumns: "550px 550px", gap: 2 }}>
+        <div style={{
+          width: "67%",
+          transform: "scale(0.67)",
+          transformOrigin: "top left"
+        }}>
           <GraphView
             nodes={nodes}
             links={links}
@@ -153,10 +143,19 @@ const DualViews: React.FC<Props> = ({
             onNodePositionChange={onGraphPositions}
             onHover={setHover}
             hover={hover}
-          />}
+          />
         </div>
-        <div id="chart2" className="view">
-          <MatrixView nodes={nodes} links={links} onHover={setHover} hover={hover} />
+        <div style={{
+          width: "67%",
+          transform: "scale(0.67)",
+          transformOrigin: "top left"
+        }}>
+          <MatrixView 
+            nodes={nodes}
+            links={links}
+            onHover={setHover}
+            hover={hover}
+          />
         </div>
       </div>
     </>
