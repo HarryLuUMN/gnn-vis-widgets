@@ -1,9 +1,9 @@
 {
-	"scripts": {
-		"dev": "npm run build -- --sourcemap=inline --watch",
-		"build": "esbuild js/widget.tsx --minify --format=esm --bundle --outdir=src/gnn_vis_widgets/static",
-		"typecheck": "tsc --noEmit"
-	},
+  "scripts": {
+    "build": "esbuild js/*/index.tsx --bundle --format=esm --splitting --minify --sourcemap --outdir=dist --outbase=js",
+    "dev": "npm run build -- --watch",
+    "typecheck": "tsc --noEmit"
+  },
 	"dependencies": {
 		"@anywidget/react": "^0.2.0",
 		"d3": "^7.9.0",
