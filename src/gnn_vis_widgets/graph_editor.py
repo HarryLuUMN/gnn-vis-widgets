@@ -14,5 +14,11 @@ class GraphEditor(anywidget.AnyWidget):
 
     value = traitlets.Int(0).tag(sync=True)
 
-    def add_data(self, dataFile):
-        self.dataFile = dataFile
+    def add_data(self, dataFile: str):
+        file_path = dataFile.lstrip("/")  
+        browser_url = f"/files/{file_path}"
+        print("Exposing file to browser:", browser_url)
+        self.dataFile = browser_url
+
+    def export_data(self):
+        return self.dataFile
