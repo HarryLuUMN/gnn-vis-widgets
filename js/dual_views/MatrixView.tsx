@@ -14,7 +14,7 @@ interface MatrixViewProps {
 
 const MatrixView: React.FC<MatrixViewProps> = ({
   width = 800,
-  height = 700,
+  height = 600,
   padding = 60,
   nodes,
   links,

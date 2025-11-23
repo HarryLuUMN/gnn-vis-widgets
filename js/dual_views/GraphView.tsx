@@ -17,7 +17,7 @@ interface GraphViewProps {
 
 const GraphView: React.FC<GraphViewProps> = ({
   width = 800,
-  height = 700,
+  height = 600,
   padding = 60,
   scaleFactor = 1.4,
   nodes,
