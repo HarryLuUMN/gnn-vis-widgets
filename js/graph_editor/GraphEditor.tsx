@@ -69,12 +69,6 @@ export default function GraphEditor({
 
 
     useEffect(() => {
-
-        // loadSimGraphData(dataFile).then((data) => {
-        //         setSimGraphData(data);
-        //         console.log("Loaded graph data:", data);
-        // });
-
         console.log("Data file path:", dataFile);
         if (!simGraphData) return;    
 
@@ -84,9 +78,6 @@ export default function GraphEditor({
         const height = 640;
         const color = d3.scaleOrdinal(d3.schemeTableau10);
 
-        // const dataset = require(dataFile);
-        // setSimGraphData(dataset);
-        // console.log("Initial graph data:", dataset);
         let data = simGraphData;
                 console.log("Loaded graph:", data);
 

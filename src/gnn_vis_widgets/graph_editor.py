@@ -13,3 +13,6 @@ class GraphEditor(anywidget.AnyWidget):
     _css = DIST / "graph_editor" / "index.css"
 
     value = traitlets.Int(0).tag(sync=True)
+
+    def add_data(self, dataFile):
+        self.dataFile = dataFile
