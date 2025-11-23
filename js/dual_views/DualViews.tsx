@@ -6,7 +6,7 @@ import { dualViewVisualizerStyle } from "../utils/const";
 // import GraphEditor from "./GraphEditor";
 
 interface Props {
-  dataFile: string;
+  graphData: any;
   hubNodeA?: number;
   hubNodeB?: number;
   modelType?: string; // "node prediction" | "link prediction" | "graph"
@@ -29,7 +29,7 @@ const elementMap: Record<number, string> = {
 };
 
 const DualViews: React.FC<Props> = ({
-  dataFile,
+  graphData,
   hubNodeA,
   hubNodeB,
   modelType,
@@ -48,17 +48,16 @@ const DualViews: React.FC<Props> = ({
     let cancelled = false;
     async function load() {
       try {
-        const useRemote = modelType?.includes("link prediction") || !sandboxMode;
-        const data = useRemote
-          ? await (await fetch(dataFile)).json()
-          : simulatedGraphData;
+        const data = graphData;
+        console.log("DualViews received graphData =", graphData, data);
+
         if (cancelled) return;
 
-        const isTwitchData = typeof dataFile === "string" && dataFile.includes("twitch.json");
+        // const isTwitchData = typeof dataFile === "string" && dataFile.includes("twitch.json");
 
         // determine processed nodes
         let processed: number[] = [];
-        if (isTwitchData && modelType?.includes("link prediction")) {
+        if (modelType?.includes("link prediction")) {
           const sub = new Set<number>();
           if (hubNodeA != null) sub.add(hubNodeA);
           if (hubNodeB != null) sub.add(hubNodeB);
@@ -77,7 +76,7 @@ const DualViews: React.FC<Props> = ({
 
         const nodeList: NodeDatum[] = processed.map((nodeId: number) => {
           let label = String(nodeId);
-          if (!sandboxMode && modelType?.includes("node prediction") && !isTwitchData) {
+          if (!sandboxMode && modelType?.includes("node prediction")) {
             const feats = data.x[nodeId];
             const idx = Array.isArray(feats) ? feats.indexOf(1) : -1;
             if (idx !== -1 && elementMap[idx] != null) label = elementMap[idx];
@@ -110,7 +109,7 @@ const DualViews: React.FC<Props> = ({
     return () => {
       cancelled = true;
     };
-  }, [dataFile, modelType, sandboxMode, simulatedGraphData, hubNodeA, hubNodeB]);
+  }, [graphData, modelType, sandboxMode, simulatedGraphData, hubNodeA, hubNodeB]);
 
   const onGraphPositions = (positions: { id: number; x: number; y: number }[]) => {
     if (!onNodePositionChange) return;
