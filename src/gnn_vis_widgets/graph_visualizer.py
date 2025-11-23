@@ -2,6 +2,7 @@ import pathlib
 import anywidget
 import traitlets
 from .utils.data_loader import load_json
+from .utils.subgraph_sampling import subgraph_hoop_sampling
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 
@@ -17,3 +18,13 @@ class GraphVisualizer(anywidget.AnyWidget):
 
     def add_data(self, dataFile):
         self.graphData = load_json(self=self,file_path=dataFile, root=ROOT)
+
+    def subgraph_hoop_visualizer(self, hubNode: int, hoopNum: int):
+        if not self.graphData:
+            raise ValueError("graphData is empty. Call add_data() first.")
+
+        sub = subgraph_hoop_sampling(self.graphData, hubNode, hoopNum)
+        self.graphData = sub 
+
+        print(f"Updated to {hoopNum}-hop subgraph centered at {hubNode}.")
+
