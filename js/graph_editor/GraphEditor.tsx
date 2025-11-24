@@ -46,6 +46,8 @@ export default function GraphEditor({
     >(null);
 
     const [simGraphData, setSimGraphData] = React.useState<any>();
+    const [feature, setFeature] = useState<string>("");
+
 
     const selectedLinkRef = useRef<SVGLineElement | null>(null);
 
@@ -506,6 +508,25 @@ export default function GraphEditor({
                     >
                         Edge Edit
                     </button>
+                    <div style={{ padding: "8px 4px" }}>
+                        <label style={{ fontWeight: "bold", marginRight: "8px", color: "#555" }}>
+                            Feature Editor:
+                        </label>
+                        <input
+                            type="text"
+                            value={feature}
+                            onChange={(e) => setFeature(e.target.value)}
+                            placeholder="e.g. 0.1, -0.3, 0.5, 1.2, 0.0"
+                            style={{
+                                width: "60%",
+                                padding: "6px 8px",
+                                borderRadius: "4px",
+                                border: "1px solid #ccc",
+                                fontFamily: "monospace",
+                                fontSize: "12px",
+                            }}
+                        />
+                    </div>
                 </div>
 
                 <div
