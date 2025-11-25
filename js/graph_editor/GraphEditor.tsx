@@ -2,8 +2,10 @@ import React, { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 import {
     loadSimGraphData,
+    parseFeatureText,
     processDataFromEditorToVisualizer,
     processDataFromVisualizerToEditor,
+    randomizeFeatures,
 } from "./graphEditorUtils";
 
 type Position = { x: number; y: number };
@@ -46,7 +48,9 @@ export default function GraphEditor({
     >(null);
 
     const [simGraphData, setSimGraphData] = React.useState<any>();
+
     const [feature, setFeature] = useState<string>("");
+    const [featureDim, setFeatureDim] = useState<number>(0);
 
 
     const selectedLinkRef = useRef<SVGLineElement | null>(null);
@@ -57,17 +61,36 @@ export default function GraphEditor({
     });
 
     useEffect(() => {
-    if (!dataFile) return;
+        if (!dataFile) return;
 
-    console.log("Loading JSON:", dataFile);
+        console.log("Loading JSON:", dataFile);
 
-    loadSimGraphData(dataFile)
-        .then((data) => {
-            console.log("Loaded JSON:", data);
-            setSimGraphData(data);  
-        })
-        .catch((err) => console.error("Error loading JSON:", err));
-}, [dataFile]);
+        loadSimGraphData(dataFile)
+            .then((data) => {
+                console.log("Loaded JSON:", data);
+                setSimGraphData(data);  
+
+                // determine feature dimension
+        let dim = 34;
+        if (data.x && data.x.length > 0) {
+            const first = data.x[0];
+            if (Array.isArray(first)) {
+                dim = first.length;
+            }
+        }
+
+        // initialize feature values
+        const featureText = randomizeFeatures(dim);
+
+        setFeature(featureText);
+
+        setFeatureDim(dim);
+        console.log("Feature dimension:", dim, featureText);
+            })
+            .catch((err) => console.error("Error loading JSON:", err));
+
+        
+    }, [dataFile]);
 
 
     useEffect(() => {
@@ -80,6 +103,9 @@ export default function GraphEditor({
         const height = 640;
         const color = d3.scaleOrdinal(d3.schemeTableau10);
 
+        
+
+        
         let data = simGraphData;
                 console.log("Loaded graph:", data);
 
@@ -87,7 +113,8 @@ export default function GraphEditor({
                 datasetRef.current = initialData;
 
                 const links = initialData.links.map((d) => Object.create(d));
-                const nodes = initialData.nodes.map((d) => Object.create(d));
+                const nodes = initialData.nodes.map((d) => ({ ...d }));
+
                 nodesRef.current = nodes;
                 linksRef.current = links;
 
@@ -359,6 +386,15 @@ export default function GraphEditor({
 
                 function addNodeAt(x: number, y: number) {
                     const newNodeId = `N${nodesRef.current.length}`;
+                    // const featureText = randomizeFeatures(dim);
+
+                    console.log("new node feature - before add 0:", feature);
+                    console.log("feature dim:", featureDim);
+
+                    const featureAdd = parseFeatureText(feature);
+
+                    console.log("new node feature - before add 1:", featureAdd);
+
                     const newNode = {
                         id: newNodeId,
                         group: 3,
@@ -366,7 +402,14 @@ export default function GraphEditor({
                         y,
                         fx: x,
                         fy: y,
+                        feature: featureAdd,
                     };
+                    const newFeatureText = randomizeFeatures(featureDim);
+                    setFeature(newFeatureText);
+
+                    console.log("New node feature:", featureAdd, newFeatureText);
+                    console.log("new node feature text:", feature);
+
                     console.log("Adding new node:", getCurrentDataset());
                     nodesRef.current.push(newNode);
                     simulation.nodes(nodesRef.current);
